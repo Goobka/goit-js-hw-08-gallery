@@ -95,8 +95,8 @@ function onPressKey(event) {
     }
     return;
   }
-
-  //КРУГОВАЯ ГАЛЛЕРЕЯ, ДОЛЖНА БЫ РАБОТАТЬ, НО НЕТ. ПОЧЕМУ?
+  
+  //КРУГОВАЯ ГАЛЛЕРЕЯ
 
   /* if (event.code === 'ArrowRight') {
     if (activeImgIndex < gallery.length - 1) {
@@ -107,7 +107,7 @@ function onPressKey(event) {
     }
     return;
   }
-​
+
   if (event.code === 'ArrowLeft') {
     if (activeImgIndex > 0) {
       refs.lightboxImg.src = gallery[(activeImgIndex -= 1)].original;
@@ -118,5 +118,3 @@ function onPressKey(event) {
     return;
   }*/
 };
-
- 
