@@ -11,13 +11,17 @@ const refs = {
     lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
+
+
+//ПОЧЕМУ ДОБАВЛЯЕТ ЭЛЕМЕНТЫ (ТЕГИ a и img) ВНУТРЬ ОДНОГО li??????
+
 //  const galleryItemString = ({ original, preview, description}) => {
 //     return `<li class = "gallery__item"><a class = "gallery__link" href = "${original}"><img class = "gallery__image" src = "${preview}" data-source = "${original}" alt = "${description}></a></li>`
 // };
 
 // const galleryItem = gallery.map(galleryItemString).join(" ");
 
-// galleryListRef.insertAdjacentHTML("afterbegin", galleryItem);       //ПОЧЕМУ ДОБАВЛЯЕТ ЭЛЕМЕНТЫ (ТЕГИ a и img) ВНУТРЬ ОДНОГО li??????
+// galleryListRef.insertAdjacentHTML("afterbegin", galleryItem);       
 
 refs.galleryList.addEventListener("click", onOpenModal);
 refs.modalCloseBtn.addEventListener("click", onCloseModal);
@@ -76,21 +80,43 @@ function onBackdropClick(event) {
 function onPressKey(event) {
   if (event.code === "Escape") {
     onCloseModal();
-  };
+  }
 
   if (event.code === "ArrowRight") {
     if (activeImgIndex < gallery.length - 1) {
       refs.lightboxImg.src = gallery[(activeImgIndex += 1)].original;
-    };
-    return
-  };
+    }
+    return;
+  }
 
   if (event.code === "ArrowLeft") {
     if (activeImgIndex) {
       refs.lightboxImg.src = gallery[(activeImgIndex -= 1)].original;
-    };
-    return
-  };
+    }
+    return;
+  }
+
+  //КРУГОВАЯ ГАЛЛЕРЕЯ, ДОЛЖНА БЫ РАБОТАТЬ, НО НЕТ. ПОЧЕМУ?
+
+  /* if (event.code === 'ArrowRight') {
+    if (activeImgIndex < gallery.length - 1) {
+      refs.lightboxImg.src = gallery[(activeImgIndex += 1)].original;
+    } else {
+      refs.lightboxImg.src = gallery[0].original;
+      activeImgIndex = 0;
+    }
+    return;
+  }
+​
+  if (event.code === 'ArrowLeft') {
+    if (activeImgIndex > 0) {
+      refs.lightboxImg.src = gallery[(activeImgIndex -= 1)].original;
+    } else {
+      refs.lightboxImg.src = gallery[gallery.length - 1].original;
+      activeImgIndex = gallery.length - 1;
+    }
+    return;
+  }*/
 };
 
  
