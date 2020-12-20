@@ -2,9 +2,13 @@ import gallery from './gallery-items.js'
 
 
 const refs = {
-    galleryListRef: document.querySelector(".gallery"),
-    lightboxRef: document.querySelector(".lightbox"),
-    lightboxImgRef: document.querySelector(".lightbox__image"),
+    galleryList: document.querySelector(".gallery"),
+    galleryLink: document.querySelector(".gallery__link"),
+    lightbox: document.querySelector(".lightbox"),
+    lightboxImg: document.querySelector(".lightbox__image"),
+    lightboxContent: document.querySelector(".lightbox__content"),
+    modalCloseBtn: document.querySelector(".lightbox__button"),
+    lightboxOverlay: document.querySelector(".lightbox__overlay"),
 };
 
 //  const galleryItemString = ({ original, preview, description}) => {
@@ -13,11 +17,12 @@ const refs = {
 
 // const galleryItem = gallery.map(galleryItemString).join(" ");
 
-// galleryListRef.insertAdjacentHTML("afterbegin", galleryItem);       //ПОЧЕМУ ДОБАВЛЯЕТ ЭЛЕМЕНТЫ ТЕГИ a и img ВНУТРЬ ОДНОГО li?
+// galleryListRef.insertAdjacentHTML("afterbegin", galleryItem);       //ПОЧЕМУ ДОБАВЛЯЕТ ЭЛЕМЕНТЫ (ТЕГИ a и img) ВНУТРЬ ОДНОГО li??????
 
-refs.galleryListRef.addEventListener("click", onGalleryListRefClick);
-
-console.log(refs.galleryListRef)
+refs.galleryList.addEventListener("click", onOpenModal);
+refs.modalCloseBtn.addEventListener("click", onCloseModal);
+refs.lightboxOverlay.addEventListener("click", onBackdropClick);
+console.log(refs.galleryList)
 
 
 const galleryItems = gallery.map(galleryItem => {
@@ -30,19 +35,62 @@ const galleryItems = gallery.map(galleryItem => {
     imgEl.classList.add("gallery__image");
     imgEl.src = galleryItem.preview;
     imgEl.dataset.source = galleryItem.original;
+    imgEl.dataset.index = gallery.indexOf(galleryItem);
     imgEl.alt = galleryItem.description;
     refEl.appendChild(imgEl);
     itemEl.appendChild(refEl);
     return itemEl;
 });
-refs.galleryListRef.append(...galleryItems); 
+refs.galleryList.append(...galleryItems); 
+
+let activeImgIndex;
+
+function onOpenModal(event) {
+    event.preventDefault();
+    window.addEventListener("keydown", onPressKey);
+
+    if (event.target.nodeName !== "IMG") {
+    return
+};
+    refs.lightbox.classList.add("is-open");
+    refs.lightboxImg.src = event.target.dataset.source;
+
+    activeImgIndex = Number(event.target.dataset.index);
+};
 
 
-function onGalleryListRefClick(event) {
-    //event.stopPropagation()
-    //const tagImg = event.target;
-    console.dir(event.target);
-    // refs.lightboxRef.classList.add(".lightbox.is-open");
-    // refs.lightboxImgRef.src = event.target.dataset.source;
-    // return console.log(event.target);
-}
+function onCloseModal(event) {
+    window.removeEventListener("keydown", onPressKey);
+    refs.lightbox.classList.remove("is-open");
+    refs.lightboxImg.src = "";
+    refs.lightboxImg.alt = "";
+}; 
+
+function onBackdropClick(event) {
+    if (event.target === event.currentTarget) {
+        onCloseModal();
+    };
+
+};
+
+function onPressKey(event) {
+  if (event.code === "Escape") {
+    onCloseModal();
+  };
+
+  if (event.code === "ArrowRight") {
+    if (activeImgIndex < gallery.length - 1) {
+      refs.lightboxImg.src = gallery[(activeImgIndex += 1)].original;
+    };
+    return
+  };
+
+  if (event.code === "ArrowLeft") {
+    if (activeImgIndex) {
+      refs.lightboxImg.src = gallery[(activeImgIndex -= 1)].original;
+    };
+    return
+  };
+};
+
+ 
